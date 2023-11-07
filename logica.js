@@ -1,7 +1,7 @@
 const graphData = {
     nodes: [
-        { id: 0, name: "Base de Carga", state: "pending", x: 10, y: 100 },
-        { id: 1, name: "Aspiradora", state: "pending", x: 10, y: 100 },
+        { id: 0, name: "Base de Carga", state: "", x: 10, y: 100 },
+        { id: 1, name: "Aspiradora", state: null, x: 10, y: 100 },
         { id: 2, name: "Contenedor 1", state: "in_progress", x: 400, y: 300 },
         { id: 3, name: "Contenedor 2", state: "pending", x: 449, y: 64 },
         { id: 4, name: "Contenedor 3", state: "pending", x: 622, y: 405 },
@@ -39,20 +39,22 @@ const nodes = svg.selectAll("circle")
 
 
 function generateRandomState() {
-    const possibleStates = ["pending", "in_progress", "completed", "delayed"];
+    const possibleStates = ["Libre para limpiar", "Ocupada continuar con otra", "Limpia no limpiar", "Sucia limpiar"];
     const randomIndex = Math.floor(Math.random() * possibleStates.length);
     return possibleStates[randomIndex];
 }
 
 graphData.nodes.forEach(node => {
-    node.state = generateRandomState();
+   if (node.name !== "Base de Carga") {
+        node.state = generateRandomState();
+    }
 });
 
 const nodeLabels = svg.selectAll(".node-label")
     .data(graphData.nodes)
     .enter().append("text")
     .attr("class", "node-label")
-    .text(d => `${d.name} - ${d.state}`)
+    .text(d => d.name !== "Base de Carga" ? `${d.name} - ${d.state}` : d.name)
     .attr("dx", 12)
     .attr("dy", 4);
 
@@ -169,18 +171,32 @@ function hideAspiradoraLabels() {
 nodes.call(drag(simulation));
 
 // Animar el movimiento de la aspiradora hacia Tarea 2
-const tarea2Node = graphData.nodes.find(node => node.name === "Contenedor 1");
 let aspiradoraNode = graphData.nodes.find(node => node.name === "Aspiradora");
-
-// Animar el movimiento de la aspiradora hacia Tarea 2
-anime({
-    targets: aspiradoraNode,
-    x: tarea2Node.x,
-    y: tarea2Node.y,
-    duration: 1000, // Duración de la animación en milisegundos
-    easing: 'steps(15)', // Opción de animación de pasos
-    update: () => {
-        hideAspiradoraLabels(); // Verificar y ocultar etiquetas si es necesario
-        simulation.nodes(graphData.nodes); // Actualizar la simulación en cada fotograma durante la animación
-    }
+const contenedores = graphData.nodes.filter(node => node.name.includes("Contenedor"));
+const timeline = anime.timeline({
+    easing: 'linear',
+    autoplay: false,
 });
+
+// Añadir las animaciones de los contenedores
+contenedores.forEach(contenedor => {
+    timeline.add({
+        targets: aspiradoraNode,
+        x: contenedor.x,
+        y: contenedor.y,
+        duration: 1000,
+        update: hideAspiradoraLabels, // Vincular la función con el evento de actualización
+    });
+});
+
+// Añadir animación de retorno al punto de origen
+timeline.add({
+    targets: aspiradoraNode,
+    x: graphData.nodes[0].x,
+    y: graphData.nodes[0].y,
+    duration: 1000,
+    update: hideAspiradoraLabels, // Vincular la función con el evento de actualización
+});
+
+// Iniciar la línea de tiempo
+timeline.play();
