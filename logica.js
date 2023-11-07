@@ -11,7 +11,7 @@ const graphData = {
     ]
 };
 
-const width = 800;
+const width = 950;
 const height = 600;
 
 const svg = d3.select("#graph-container")
