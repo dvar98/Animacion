@@ -1,0 +1,8 @@
+#graph-container {
+  width: 800px;
+  height: 600px;
+  border: 2px solid #000000;
+}
+.aspiradora {
+  fill: gray;
+}
