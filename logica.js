@@ -174,18 +174,84 @@ nodes.call(drag(simulation));
 let aspiradoraNode = graphData.nodes.find(node => node.name === "Aspiradora");
 const contenedores = graphData.nodes.filter(node => node.name.includes("Contenedor"));
 const timeline = anime.timeline({
-    easing: 'linear',
+    easing: 'steps(50)',
     autoplay: false,
 });
 
-// Añadir las animaciones de los contenedores
-contenedores.forEach(contenedor => {
+// Función para pausar la animación
+async function pauseAnimation() {
+    await new Promise(resolve => timeline.pause());
+}
+
+// Función para reanudar la animación
+function resumeAnimation() {
+    timeline.play();
+}
+
+// Función para retrasar la animación
+async function delayAnimation(delay) {
+    return new Promise(resolve => setTimeout(resolve, delay));
+}
+
+// Función para manejar el contenedor sucio
+async function handleDirtyContainer(contenedor) {
+    pauseAnimation();
+    console.log(`Limpiando ${contenedor.name}`);
+    await delayAnimation(500);
+    contenedor.state = "Limpia no limpiar";
+    updateNodeLabel(contenedor);
+    console.log(`Terminando de limpiar ${contenedor.name}`);
+    resumeAnimation();
+}
+
+// Función para manejar el contenedor libre para limpiar
+async function handleFreeContainer(contenedor) {
+    pauseAnimation();
+    console.log(`Entrando al contenedor ${contenedor.name}`);
+    await delayAnimation(500);
+    contenedor.state = "Limpia no limpiar";
+    updateNodeLabel(contenedor);
+    console.log(`Terminando de limpiar ${contenedor.name}`);
+    resumeAnimation();
+}
+
+// Función para manejar el contenedor ocupado
+function handleOccupiedContainer(contenedor, index, contenedores) {
+    console.log(`Evitando entrar al contenedor ocupado ${contenedor.name}`);
+    const nextNode = contenedores[index + 1];
+    if (nextNode) {
+        resumeAnimation();
+    }
+}
+
+// Función para manejar el contenedor limpio
+function handleCleanContainer(contenedor, index, contenedores) {
+    console.log(`Evitando entrar al contenedor limpio ${contenedor.name}`);
+    const nextNode = contenedores[index + 1];
+    if (nextNode) {
+        resumeAnimation();
+    }
+}
+
+// Uso de las funciones en el bucle forEach
+contenedores.forEach(async (contenedor, index) => {
     timeline.add({
         targets: aspiradoraNode,
         x: contenedor.x,
         y: contenedor.y,
         duration: 1000,
-        update: hideAspiradoraLabels, // Vincular la función con el evento de actualización
+        update: async (anim) => {
+            hideAspiradoraLabels();
+            if (contenedor.state === "Sucia limpiar" && aspiradoraNode.x === contenedor.x && aspiradoraNode.y === contenedor.y) {
+                await handleDirtyContainer(contenedor);
+            } else if (contenedor.state === "Libre para limpiar" && aspiradoraNode.x === contenedor.x && aspiradoraNode.y === contenedor.y) {
+                await handleFreeContainer(contenedor);
+            } else if (contenedor.state === "Ocupada continuar con otra" && aspiradoraNode.x === contenedor.x && aspiradoraNode.y === contenedor.y) {
+                handleOccupiedContainer(contenedor, index, contenedores);
+            } else if (contenedor.state === "Limpia no limpiar" && aspiradoraNode.x === contenedor.x && aspiradoraNode.y === contenedor.y) {
+                handleCleanContainer(contenedor, index, contenedores);
+            }
+        }
     });
 });
 
@@ -194,9 +260,17 @@ timeline.add({
     targets: aspiradoraNode,
     x: graphData.nodes[0].x,
     y: graphData.nodes[0].y,
-    duration: 1000,
+    duration: 2300,
     update: hideAspiradoraLabels, // Vincular la función con el evento de actualización
 });
+
+// Función para actualizar la etiqueta del nodo
+function updateNodeLabel(node) {
+    svg.selectAll(".node-label")
+        .filter(d => d.id === node.id)
+        .text(d => `${d.name} - ${d.state}`);
+}
+
 
 // Iniciar la línea de tiempo
 timeline.play();
