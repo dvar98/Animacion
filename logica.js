@@ -1,19 +1,23 @@
 document.getElementById('btnIniciar').addEventListener('click', () => {
     const graphData = {
         nodes: [
-            { id: 0, name: "Base de Carga", state: "", x: 10, y: 100 },
-            { id: 1, name: "Aspiradora", state: null, x: 10, y: 100 },
-            { id: 2, name: "Contenedor 1", state: "in_progress", x: 400, y: 300 },
-            { id: 3, name: "Contenedor 2", state: "pending", x: 449, y: 64 },
-            { id: 4, name: "Contenedor 3", state: "pending", x: 622, y: 405 },
-            { id: 5, name: "Contenedor 4", state: "pending", x: 204, y: 499 },
+            { id: 0, name: "Base de Carga", state: "", x: 147, y: 103 },
+            { id: 1, name: "Aspiradora", state: null, x: 147, y: 103 },
+            { id: 2, name: "Contenedor 1", state: "in_progress", x: 146, y: 256 },
+            { id: 3, name: "Contenedor 2", state: "pending", x: 289, y: 150 },
+            { id: 4, name: "Contenedor 3", state: "pending", x: 310, y: 257 },
+            { id: 5, name: "Contenedor 4", state: "pending", x: 296, y: 388 },
         ],
         links: [
         ]
     };
 
-    const width = 950;
-    const height = 600;
+    updateTable();
+
+    const graph_container = document.getElementById('graph-container');
+
+    const width = graph_container.offsetWidth
+    const height = graph_container.offsetHeight
 
 
     const svg = d3.select("#graph-container")
@@ -171,7 +175,7 @@ document.getElementById('btnIniciar').addEventListener('click', () => {
     }
 
     //Arrastrar nodos
-    // nodes.call(drag(simulation));
+    nodes.call(drag(simulation));
 
     // Animar el movimiento de la aspiradora hacia Tarea 2
     let aspiradoraNode = graphData.nodes.find(node => node.name === "Aspiradora");
@@ -272,6 +276,15 @@ document.getElementById('btnIniciar').addEventListener('click', () => {
         svg.selectAll(".node-label")
             .filter(d => d.id === node.id)
             .text(d => `${d.name} - ${d.state}`);
+        updateTable();
+    }
+
+    function updateTable() {
+        for (let index = 2; index < graphData.nodes.length; index++) {
+            const space = document.querySelector(`tr:nth-child(${index + 1}) .status`)
+            console.log(space);
+            space.innerHTML = (graphData.nodes[index].state)
+        }
     }
 
 
