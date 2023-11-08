@@ -1,11 +1,11 @@
 const graphData = {
     nodes: [
         { id: 0, name: "Base de Carga", state: "", x: 10, y: 100 },
-        { id: 1, name: "Aspiradora", state: null, x: 10, y: 100 },
-        { id: 2, name: "Contenedor 1", state: "in_progress", x: 400, y: 300 },
-        { id: 3, name: "Contenedor 2", state: "pending", x: 449, y: 64 },
-        { id: 4, name: "Contenedor 3", state: "pending", x: 622, y: 405 },
-        { id: 5, name: "Contenedor 4", state: "pending", x: 204, y: 499 },
+        { id: 1, name: "Aspiradora", state: "", x: 10, y: 100 },
+        { id: 2, name: "Contenedor 1", state: null, x: 400, y: 300 },
+        { id: 3, name: "Contenedor 2", state: null, x: 449, y: 64 },
+        { id: 4, name: "Contenedor 3", state: null, x: 622, y: 405 },
+        { id: 5, name: "Contenedor 4", state: null, x: 204, y: 499 },
     ],
     links: [
     ]
@@ -174,7 +174,7 @@ nodes.call(drag(simulation));
 let aspiradoraNode = graphData.nodes.find(node => node.name === "Aspiradora");
 const contenedores = graphData.nodes.filter(node => node.name.includes("Contenedor"));
 const timeline = anime.timeline({
-    easing: 'steps(50)',
+    easing: 'linear',
     autoplay: false,
 });
 
@@ -216,40 +216,44 @@ async function handleFreeContainer(contenedor) {
 }
 
 // Función para manejar el contenedor ocupado
-function handleOccupiedContainer(contenedor, index, contenedores) {
+async function handleOccupiedContainer(contenedor, id, contenedores) {
     console.log(`Evitando entrar al contenedor ocupado ${contenedor.name}`);
-    const nextNode = contenedores[index + 1];
+    const nextNode = contenedores[id + 1];
     if (nextNode) {
         resumeAnimation();
     }
 }
 
 // Función para manejar el contenedor limpio
-function handleCleanContainer(contenedor, index, contenedores) {
+async function handleCleanContainer(contenedor, id, contenedores) {
     console.log(`Evitando entrar al contenedor limpio ${contenedor.name}`);
-    const nextNode = contenedores[index + 1];
+    const nextNode = contenedores[id + 1];
     if (nextNode) {
         resumeAnimation();
     }
 }
 
-// Uso de las funciones en el bucle forEach
-contenedores.forEach(async (contenedor, index) => {
+
+// Añadir las animaciones de los contenedores
+contenedores.forEach((contenedor,id) => {
     timeline.add({
         targets: aspiradoraNode,
         x: contenedor.x,
         y: contenedor.y,
         duration: 1000,
-        update: async (anim) => {
+        update: () => {
             hideAspiradoraLabels();
-            if (contenedor.state === "Sucia limpiar" && aspiradoraNode.x === contenedor.x && aspiradoraNode.y === contenedor.y) {
+            simulation.alpha(0.3).restart();
+        }, // Vincular la función con el evento de actualización
+        complete: async () => {
+            if (contenedor.state === "Sucia limpiar") {
                 await handleDirtyContainer(contenedor);
-            } else if (contenedor.state === "Libre para limpiar" && aspiradoraNode.x === contenedor.x && aspiradoraNode.y === contenedor.y) {
+            } else if (contenedor.state === "Libre para limpiar") {
                 await handleFreeContainer(contenedor);
             } else if (contenedor.state === "Ocupada continuar con otra" && aspiradoraNode.x === contenedor.x && aspiradoraNode.y === contenedor.y) {
-                handleOccupiedContainer(contenedor, index, contenedores);
+                handleOccupiedContainer(contenedor, id, contenedores);
             } else if (contenedor.state === "Limpia no limpiar" && aspiradoraNode.x === contenedor.x && aspiradoraNode.y === contenedor.y) {
-                handleCleanContainer(contenedor, index, contenedores);
+                handleCleanContainer(contenedor, id, contenedores);
             }
         }
     });
@@ -260,8 +264,11 @@ timeline.add({
     targets: aspiradoraNode,
     x: graphData.nodes[0].x,
     y: graphData.nodes[0].y,
-    duration: 2300,
+    duration: 1000,
     update: hideAspiradoraLabels, // Vincular la función con el evento de actualización
+    complete: () => {
+        simulation.alpha(0).stop();
+    }
 });
 
 // Función para actualizar la etiqueta del nodo
