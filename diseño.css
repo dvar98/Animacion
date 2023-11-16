@@ -36,6 +36,8 @@ main {
 }
 
 #graph-container {
+  position: relative;
+
   width: 450px;
   height: 550px;
   border: 2px solid #000000;
@@ -43,6 +45,61 @@ main {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+#graph-container .sala {
+  position: absolute;
+  width: 152px;
+  height: 318px;
+
+  top: 82px;
+  left: 72px;
+
+  background-color: rgba(255, 0, 0, 0.104);
+}
+
+#graph-container .recamara1 {
+  position: absolute;
+  width: 144px;
+  height: 134px;
+
+  top: 82px;
+  left: 216px;
+
+  background-color: rgba(0, 0, 255, 0.393);
+}
+
+#graph-container .baño {
+  position: absolute;
+  width: 87px;
+  height: 86px;
+
+  top: 211px;
+  left: 272px;
+
+  background-color: rgba(255, 255, 0, 0.417);
+}
+
+#graph-container .recamara2 {
+  position: absolute;
+  width: 143px;
+  height: 153px;
+
+  top: 292px;
+  left: 217px;
+
+  background-color: rgba(0, 128, 0, 0.326);
+}
+
+#graph-container .pasillo {
+  position: absolute;
+  width: 64px;
+  height: 91px;
+
+  top: 212px;
+  left: 212px;
+
+  background-color: rgba(128, 0, 128, 0.35);
 }
 
 .aspiradora {
