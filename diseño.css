@@ -47,6 +47,13 @@ main {
   background-position: center;
 }
 
+#graph-container .aspiradora{
+  position: absolute;
+  transition: top 0.5s linear, left 0.5s linear;
+  /* top:88px;
+  left:120px; */
+}
+
 #graph-container .sala {
   position: absolute;
   width: 152px;
@@ -55,7 +62,7 @@ main {
   top: 82px;
   left: 72px;
 
-  background-color: rgba(255, 0, 0, 0.104);
+  /* background-color: rgba(255, 0, 0, 0.104); */
 }
 
 #graph-container .recamara1 {
@@ -66,7 +73,7 @@ main {
   top: 82px;
   left: 216px;
 
-  background-color: rgba(0, 0, 255, 0.393);
+  /* background-color: rgba(0, 0, 255, 0.393); */
 }
 
 #graph-container .baño {
@@ -77,7 +84,7 @@ main {
   top: 211px;
   left: 272px;
 
-  background-color: rgba(255, 255, 0, 0.417);
+  /* background-color: rgba(255, 255, 0, 0.417); */
 }
 
 #graph-container .recamara2 {
@@ -88,7 +95,7 @@ main {
   top: 292px;
   left: 217px;
 
-  background-color: rgba(0, 128, 0, 0.326);
+  /* background-color: rgba(0, 128, 0, 0.326); */
 }
 
 #graph-container .pasillo {
@@ -99,7 +106,7 @@ main {
   top: 212px;
   left: 212px;
 
-  background-color: rgba(128, 0, 128, 0.35);
+  /* background-color: rgba(128, 0, 128, 0.35); */
 }
 
 .aspiradora {
