@@ -19,11 +19,20 @@
   <main>
     <div class="animation">
       <div class="left">
-        <div id="graph-container"></div>
+        <div id="graph-container">
+          <div style="top:220px;left:218px" class="aspiradora">
+            <img style="width: 50px;" src="./ic-action-list_108237.ico" alt="">
+          </div>
+          <div id="sala"></div>
+          <div id="recamara1"></div>
+          <div id="baño"></div>
+          <div id="pasillo"></div>
+          <div id="recamara2"></div>
+        </div>
       </div>
 
       <div class="right">
-        <table>
+        <table id="statusHabitaciones">
           <tbody>
             <tr>
               <th colspan="2">Estado Habitaciones</th>
@@ -32,24 +41,48 @@
               <th>Habitación</th>
               <th>Estado</th>
             </tr>
-            <tr class="table-content" id="2">
+            <tr class="table-content" id="1">
               <td>Sala Comedor</td>
               <td class="status"></td>
             </tr>
-            <tr class="table-content" id="3">
+            <tr class="table-content" id="2">
               <td>Recamara</td>
               <td class="status"></td>
             </tr>
-            <tr class="table-content" id="4">
+            <tr class="table-content" id="3">
               <td>Baño</td>
               <td class="status"></td>
             </tr>
-            <tr class="table-content" id="5">
+            <tr class="table-content" id="4">
               <td>Recamara Principal</td>
               <td class="status"></td>
             </tr>
           </tbody>
         </table>
+        <table id="statusAspiradora">
+          <tbody>
+            <tr>
+              <th id="titleAspiradora" colspan="2">Estado Aspiradora</th>
+            </tr>
+            <tr class="table-content" id="1">
+              <td>Bodegas Limpias</td>
+              <td class="status"></td>
+            </tr>
+            <tr class="table-content" id="2">
+              <td>Bateria</td>
+              <td class="status"></td>
+            </tr>
+            <tr class="table-content" id="3">
+              <td>Estado</td>
+              <td class="status"></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="statusAspiradora">
+          <p id="bodegasLimpias"></p>
+          <p id="batteryStatus"></p>
+          <p id="status"></p>
+        </div>
       </div>
 
     </div>
@@ -72,6 +105,6 @@
     </div>
   </footer>
 </body>
-<script src="logica.js"></script>
+<script src="./fsm.js"></script>
 
 </html>
