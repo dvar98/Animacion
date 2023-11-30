@@ -47,7 +47,7 @@ main {
   background-position: center;
 }
 
-#graph-container .aspiradora{
+#graph-container .aspiradora {
   position: absolute;
   transition: top 0.5s linear, left 0.5s linear;
   /* top:88px;
@@ -123,12 +123,18 @@ main {
 .right,
 .left {
   display: flex;
+  flex-wrap: wrap;
   width: 50%;
 }
 
 .left {
   justify-content: center;
 
+}
+
+.right {
+  justify-content: center;
+  gap: 20px;
 }
 
 .animation table {
@@ -168,12 +174,21 @@ tr.encabezado {
   background-color: #e0e0e0;
 }
 
+#statusAspiradora {
+  width: 600px;
+  height: 300px;
+}
+
+#titleAspiradora {
+  background-color: bisque;
+}
+
 tr.table-content:hover {
   background-color: #c0c0c0;
 }
 
 footer {
-  padding: 50px;
+  padding: 40px 30px 20px 60px;
   background-color: beige;
 }
 

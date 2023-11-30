@@ -1,5 +1,5 @@
 //[top,left]
-let habitaciones = {
+const habitaciones = {
     'baseCarga': [230, 218],
     'sala': [230, 120],
     'recamara1': [110, 270],
@@ -17,6 +17,7 @@ let pasillo = document.querySelector('#graph-container .pasillo');
 let recamara2 = document.querySelector('#graph-container .recamara2');
 
 document.getElementById('btnIniciar').addEventListener('click', () => {
+    
     moverAspiradora('pasillo')
         .then(() => {
             moverAspiradora('recamara2')
