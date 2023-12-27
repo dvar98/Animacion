@@ -146,7 +146,7 @@ async function limpiarBodega(bodega) {
     //tabla
     const space = document.querySelector(`#statusHabitaciones tr:nth-child(${habitaciones[bodega.id][2] + 2}) .status`);
     space.innerHTML = 'limpia';
-    bateria -= 10;
+    bateria -= 30;
 
     if (!bodegasContadas.has(bodega)) {
       bodegasContadas.add(bodega);
